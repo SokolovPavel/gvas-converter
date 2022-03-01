@@ -7,7 +7,7 @@ namespace GvasFormat
     /*
      * General format notes:
      * Strings are 4-byte length + value + \0, length includes \0
-     *
+     *May be Astroneer related format
      */
     public class Gvas
     {
@@ -19,5 +19,6 @@ namespace GvasFormat
         public CustomFormatData CustomFormatData = new CustomFormatData();
         public string SaveGameType;
         public List<UEProperty> Properties = new List<UEProperty>();
+        public object SaveGameData { get; set; }
     }
 }

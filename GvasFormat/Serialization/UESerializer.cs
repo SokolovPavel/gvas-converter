@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Text;
-using GvasFormat.Serialization.UETypes;
+using GvasFormat.Serialization.Factories;
 using GvasFormat.Utils;
 
 namespace GvasFormat.Serialization
@@ -35,11 +35,11 @@ namespace GvasFormat.Serialization
                     entry.Value = reader.ReadInt32();
                     result.CustomFormatData.Entries[i] = entry;
                 }
+
                 result.SaveGameType = reader.ReadUEString();
+                SaveGameReader saveGameReader = SaveGameTypeReaderFactory.GetReader(result.SaveGameType);
 
-                while (UEProperty.Read(reader) is UEProperty prop)
-                    result.Properties.Add(prop);
-
+                result.SaveGameData = saveGameReader.Read(reader);
                 return result;
             }
         }

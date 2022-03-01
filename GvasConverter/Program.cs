@@ -39,7 +39,6 @@ namespace GvasConverter
                     writer.Write(json);
             }
             Console.WriteLine("Done.");
-            Console.ReadKey(true);
         }
     }
 }
