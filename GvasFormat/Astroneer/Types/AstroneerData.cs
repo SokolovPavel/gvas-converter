@@ -5,7 +5,7 @@ namespace GvasFormat.Serialization
     public class AstroneerData
     {
         [JsonIgnore]
-        public StringPool stringPool;
+        public StringPool StringPool;
         [JsonProperty(Order = 0)]
         public InstancePool InstancePool;
         [JsonProperty(Order = 1)]

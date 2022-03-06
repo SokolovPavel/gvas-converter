@@ -6,8 +6,6 @@ namespace GvasFormat.Serialization
 {
     public class ChunkPool
     {
-        public int size;
-
         public Chunk[] chunks;
 
         /*
@@ -23,7 +21,7 @@ namespace GvasFormat.Serialization
          */
         public ChunkPool(BinaryReader reader)
         {
-            size = reader.ReadInt32();
+            int size = reader.ReadInt32();
             chunks = new Chunk[size];
             for (int i = 0; i < size; i++)
             {
@@ -35,38 +33,6 @@ namespace GvasFormat.Serialization
                 Vector3 unknown = new Vector3(reader);
                 chunks[i] = new Chunk(index, array1, array2, normal, position, unknown);
             }
-/*
-            using (var outputStream = File.Open("restBytesEx.txt", FileMode.Create, FileAccess.Write, FileShare.Write))
-            {
-                using (var writer = new StreamWriter(
-                           outputStream,
-                           Encoding.ASCII))
-                {
-                    bool isPrevFloat = false;
-                    bool isCurrentFloat = false;
-                    for (int i = 0; i < size * 12 * 2; i++)
-                    {
-                        int intValue = reader.ReadInt32();
-                        if (intValue > 10000 || intValue < -10000)
-                        {
-                            isPrevFloat = true;
-                            reader.BaseStream.Position -= 4;
-                            float floatValue = reader.ReadSingle();
-                            writer.Write(String.Format("{0:0.00}", floatValue).PadLeft(10) + " ");
-                        }
-                        else
-                        {
-                            if (isPrevFloat)
-                            {
-                                writer.WriteLine();
-                            }
-
-                            isPrevFloat = false;
-                            writer.Write(String.Format("{0:0}", intValue).PadLeft(10) + " ");
-                        }
-                    }
-                }
-            }*/
         }
 
         private static int[][] ReadPairArray(BinaryReader reader)

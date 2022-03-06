@@ -8,11 +8,11 @@ namespace GvasFormat.Serialization
     {
         public readonly AstroneerObject[] _objectPool;
 
-        public InstancePool(BinaryReader reader)
+        public InstancePool(StringPool stringPool, BinaryReader reader)
         {
             int size = reader.ReadInt32(); //pool size
             _objectPool = new AstroneerObject[size];
-            AstroneerObjectReader objectReader = new AstroneerObjectReader();
+            AstroneerObjectReader objectReader = new AstroneerObjectReader(stringPool);
 
             Dictionary<string, int> map = new Dictionary<string, int>();
             for (int i = 0; i < size; i++)

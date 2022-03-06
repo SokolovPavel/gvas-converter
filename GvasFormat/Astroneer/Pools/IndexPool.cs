@@ -4,15 +4,15 @@ namespace GvasFormat.Serialization
 {
     public class IndexPool
     {
-        public int[] indexes;
+        public readonly int[] Indexes;
 
         public IndexPool(BinaryReader reader)
         {
-            int size = reader.ReadInt32();
-            indexes = new int[size];
-            for (int i = 0; i < size; i++)
+            var size = reader.ReadInt32();
+            Indexes = new int[size];
+            for (var i = 0; i < size; i++)
             {
-                indexes[i] = reader.ReadInt32();
+                Indexes[i] = reader.ReadInt32();
             }
         }
     }

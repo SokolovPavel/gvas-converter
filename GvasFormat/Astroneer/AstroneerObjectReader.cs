@@ -12,12 +12,20 @@ namespace GvasFormat.Serialization
     
     public class AstroneerObjectReader
     {
+        private readonly StringPool _stringPool;
+        
         private readonly static byte ExtendedHeader = 2;
+
+        public AstroneerObjectReader(StringPool stringPool)
+        {
+            _stringPool = stringPool;
+        }
+
         public AstroneerObject read(BinaryReader reader)
         {
             AstroneerObject astroObject = new AstroneerObject();
             astroObject.ClassName =  reader.ReadUEString();
-            astroObject.InnerIndex = reader.ReadInt32();
+            astroObject.InstanceName = _stringPool.GetString(reader.ReadInt32());
             astroObject.preHeader = reader.ReadBytes(4);
             /*
              * bits:
@@ -35,20 +43,6 @@ namespace GvasFormat.Serialization
             long position = reader.BaseStream.Position;
             int size = reader.ReadInt32();
             astroObject.Body = reader.ReadBytes(size);
-
-            /*long nextObjectPosition = reader.BaseStream.Position;
-            string possibleNextString = reader.ReadUEString();
-            if (possibleNextString == null || !possibleNextString.StartsWith("/"))
-            {
-                reader.BaseStream.Position = position;
-                astroObject.HeaderPostfix = reader.ReadBytes(4);
-                size = reader.ReadInt32();
-                astroObject.Body = reader.ReadBytes(size);
-            }
-            else
-            {
-                reader.BaseStream.Position = nextObjectPosition;
-            }*/
             
             return astroObject;
         }

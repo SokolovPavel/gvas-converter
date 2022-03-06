@@ -3,6 +3,7 @@ namespace GvasFormat.Serialization
     public class AstroneerObject
     {
         public string ClassName;
+        public string InstanceName { get; set; }
         public byte[] Body;
         public int InnerIndex { get; set; }
         public byte[] preHeader;

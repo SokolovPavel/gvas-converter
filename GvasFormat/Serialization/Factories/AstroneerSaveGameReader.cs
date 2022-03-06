@@ -13,8 +13,8 @@ namespace GvasFormat.Serialization.Factories
             int magicNumber1 = reader.ReadInt32();
             string magicString1 = reader.ReadUEString();
             
-            data.stringPool = new StringPool(reader);
-            data.InstancePool = new InstancePool(reader);
+            data.StringPool = new StringPool(reader);
+            data.InstancePool = new InstancePool(data.StringPool, reader);
             data.ChunkPool = new ChunkPool(reader);
             data.IndexPool = new IndexPool(reader);
             data.RestBytes = reader.ReadRestBytes();
