@@ -4,6 +4,7 @@ using System.Text;
 using GvasFormat;
 using GvasFormat.Serialization;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using UESavefileRecompressor;
 
 namespace GvasConverter

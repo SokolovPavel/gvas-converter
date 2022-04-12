@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GvasConverter", "GvasConver
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UESavefileRecompressor", "UESavefileRecompressor\UESavefileRecompressor.csproj", "{52D40D7D-9913-4A8F-B28F-8808D915C9CD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LastSaveFileTransfomer", "LastSaveFileTransfomer\LastSaveFileTransfomer.csproj", "{9F78F83D-0A6D-43B5-B095-EA3962FB2177}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{52D40D7D-9913-4A8F-B28F-8808D915C9CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52D40D7D-9913-4A8F-B28F-8808D915C9CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52D40D7D-9913-4A8F-B28F-8808D915C9CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F78F83D-0A6D-43B5-B095-EA3962FB2177}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F78F83D-0A6D-43B5-B095-EA3962FB2177}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F78F83D-0A6D-43B5-B095-EA3962FB2177}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F78F83D-0A6D-43B5-B095-EA3962FB2177}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -32,6 +34,26 @@ namespace GvasFormat.Serialization
                 Vector3 position = new Vector3(reader);
                 Vector3 unknown = new Vector3(reader);
                 chunks[i] = new Chunk(index, array1, array2, normal, position, unknown);
+            }
+            //Array.Sort(chunks, new ChunkComparer());
+        }
+        
+        class ChunkComparer : IComparer<Chunk>
+        {
+            public int Compare(Chunk x, Chunk y)
+            {
+                if (x.Position.X != y.Position.X)
+                {
+                    return (int)(x.Position.X - y.Position.X);
+                }
+                else if(x.Position.Y != y.Position.Y)
+                {
+                    return (int)(x.Position.Y - y.Position.Y);
+                }
+                else
+                {
+                    return (int)(x.Position.Z - y.Position.Z);
+                }
             }
         }
 
