@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 namespace GvasFormat.Serialization
@@ -21,7 +22,16 @@ namespace GvasFormat.Serialization
 
         public string GetString(int index)
         {
-            return _stringPool[index];
+            if (index >=0 && index < _stringPool.Length)
+            {
+                return _stringPool[index];
+            }
+            else
+            {
+                if(index>0)
+                    throw new Exception("Out of bound request to StringPool with index:" + index);
+                return null;
+            }
         }
     }
 }

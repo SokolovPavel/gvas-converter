@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using GvasFormat.Serialization.Factories;
 using GvasFormat.Serialization.UETypes;
@@ -37,16 +38,47 @@ namespace GvasFormat.Serialization
              * 2 - possible extended header
              */
             astroObject.FlagByte = reader.ReadByte(); //possible flags 
-            astroObject.indexOrAddress = reader.ReadBytes(4); //possible offset or index of some object
+            astroObject.parentIndex = reader.ReadUInt32();
 
             if (astroObject.HasFlag(ExtendedHeader))
             {
                 astroObject.HeaderPostfix = reader.ReadBytes(4);
             }
 
-            long position = reader.BaseStream.Position;
             int size = reader.ReadInt32();
-            astroObject.SetBody(reader, size, _stringPool);
+            long position = reader.BaseStream.Position;
+            if (size > 0)
+            {
+                try
+                {
+                    while (UEProperty.Read(reader, _stringPool) is UEProperty property )
+                    {
+                        astroObject.AddProperty(property);
+                        if (property is UENoneProperty)
+                        {
+                            break;
+                        }
+                    }
+
+                    int restBytes = size - (int) (reader.BaseStream.Position - position);
+                    if (restBytes != 0)
+                    {
+                        astroObject._body = reader.ReadBytes(restBytes);
+                    }
+                }
+                catch (Exception e)
+                {
+                    //Console.WriteLine(e.Message);
+                    reader.BaseStream.Position = position;
+                    astroObject.SetBody(reader, size, _stringPool);
+                    astroObject.propertyFailed = true;
+                }
+            }
+            else
+            {
+                reader.BaseStream.Position = position;
+                astroObject._body = reader.ReadBytes(size);
+            }
 
             return astroObject;
         }

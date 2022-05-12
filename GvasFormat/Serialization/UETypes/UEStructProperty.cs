@@ -7,9 +7,15 @@ namespace GvasFormat.Serialization.UETypes
     {
         public UEStructProperty() { }
 
-        public static UEStructProperty Read(BinaryReader reader, long valueLength)
+        public static UEStructProperty Read(BinaryReader reader, long valueLength, StringPool stringPool)
         {
-            var type = reader.ReadUEString();
+            byte[] lengthRestBytes = reader.ReadBytes(4);
+            int typeIndex = reader.ReadInt32() - 1;
+            if (typeIndex < 0)
+            {
+                return new UENullStructProperty();
+            }
+            var type = stringPool.GetString(typeIndex);
             var id = new Guid(reader.ReadBytes(16));
             if (id != Guid.Empty)
                 throw new FormatException($"Offset: 0x{reader.BaseStream.Position - 16:x8}. Expected struct ID {Guid.Empty}, but was {id}");
@@ -18,12 +24,12 @@ namespace GvasFormat.Serialization.UETypes
             if (terminator != 0)
                 throw new FormatException($"Offset: 0x{reader.BaseStream.Position - 1:x8}. Expected terminator (0x00), but was (0x{terminator:x2})");
 
-            return ReadStructValue(type, reader);
+            return ReadStructValue(type, reader, stringPool);
         }
 
-        public static UEStructProperty[] Read(BinaryReader reader, long valueLength, int count)
+        public static UEStructProperty[] Read(BinaryReader reader, long valueLength, int count, StringPool stringPool)
         {
-            var type = reader.ReadUEString();
+            var type = stringPool.GetString(reader.ReadInt32() - 1);
             var id = new Guid(reader.ReadBytes(16));
             if (id != Guid.Empty)
                 throw new FormatException($"Offset: 0x{reader.BaseStream.Position - 16:x8}. Expected struct ID {Guid.Empty}, but was {id}");
@@ -34,11 +40,11 @@ namespace GvasFormat.Serialization.UETypes
 
             var result = new UEStructProperty[count];
             for (var i = 0; i < count; i++)
-                result[i] = ReadStructValue(type, reader);
+                result[i] = ReadStructValue(type, reader, stringPool);
             return result;
         }
 
-        protected static UEStructProperty ReadStructValue(string type, BinaryReader reader)
+        protected static UEStructProperty ReadStructValue(string type, BinaryReader reader, StringPool stringPool)
         {
             UEStructProperty result;
             switch (type)
@@ -56,9 +62,12 @@ namespace GvasFormat.Serialization.UETypes
                 case "LinearColor":
                     result = new UELinearColorStructProperty(reader);
                     break;
+                case "AstroDatumRef":
+                    result = new AstroDatumRef(reader);
+                    break;
                 default:
                     var tmp = new UEGenericStructProperty();
-                        while (Read(reader) is UEProperty prop)
+                        while (Read(reader, stringPool) is UEProperty prop)
                         {
                             tmp.Properties.Add(prop);
                             if (prop is UENoneProperty)

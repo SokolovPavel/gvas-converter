@@ -23,6 +23,12 @@ namespace GvasFormat.Serialization
             return Utf8.GetString(valueBytes, 0, valueBytes.Length - 1);
         }
 
+        public static string ReadUEString(this BinaryReader reader, long length)
+        {
+            var valueBytes = reader.ReadBytes((int)length);
+            return Utf8.GetString(valueBytes, 0, valueBytes.Length - 1);
+        }
+
         public static void WriteUEString(this BinaryWriter writer, string value)
         {
             if (value == null)

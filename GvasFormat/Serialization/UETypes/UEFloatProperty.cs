@@ -10,6 +10,7 @@ namespace GvasFormat.Serialization.UETypes
         public UEFloatProperty() { }
         public UEFloatProperty(BinaryReader reader, long valueLength)
         {
+            byte[] restBytes = reader.ReadBytes(4);
             var terminator = reader.ReadByte();
             if (terminator != 0)
                 throw new FormatException($"Offset: 0x{reader.BaseStream.Position - 1:x8}. Expected terminator (0x00), but was (0x{terminator:x2})");

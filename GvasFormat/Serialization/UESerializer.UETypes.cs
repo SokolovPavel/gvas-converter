@@ -1,12 +1,13 @@
 ﻿using System;
 using System.IO;
+using GvasFormat.Serialization.Exceptions;
 using GvasFormat.Serialization.UETypes;
 
 namespace GvasFormat.Serialization
 {
     public static partial class UESerializer
     {
-        internal static UEProperty Deserialize(string name, string type, long valueLength, BinaryReader reader)
+        internal static UEProperty Deserialize(string name, string type, long valueLength, BinaryReader reader, StringPool stringPool)
         {
             UEProperty result;
             var itemOffset = reader.BaseStream.Position;
@@ -15,33 +16,48 @@ namespace GvasFormat.Serialization
                 case "BoolProperty":
                     result = new UEBoolProperty(reader, valueLength);
                     break;
+                case "UInt32Property":
+                    result = new UEUIntProperty(reader, valueLength);
+                    break;
                 case "IntProperty":
                     result = new UEIntProperty(reader, valueLength);
+                    break;
+                case "UInt64Property":
+                    result = new UEUInt64Property(reader, valueLength);
                     break;
                 case "FloatProperty":
                     result = new UEFloatProperty(reader, valueLength);
                     break;
                 case "NameProperty":
                 case "StrProperty":
-                    result = new UEStringProperty(reader, valueLength);
+                    result = new UEStringProperty(reader, valueLength, stringPool);
                     break;
                 case "TextProperty":
                     result = new UETextProperty(reader, valueLength);
                     break;
                 case "EnumProperty":
-                    result = new UEEnumProperty(reader, valueLength);
+                    result = new UEEnumProperty(reader, valueLength, stringPool);
                     break;
                 case "StructProperty":
-                    result = UEStructProperty.Read(reader, valueLength);
+                    result = UEStructProperty.Read(reader, valueLength, stringPool);
                     break;
                 case "ArrayProperty":
-                    result = new UEArrayProperty(reader, valueLength);
+                    result = new UEArrayProperty(reader, valueLength, stringPool);
                     break;
                 case "MapProperty":
-                    result = new UEMapProperty(reader, valueLength);
+                    result = new UEMapProperty(reader, valueLength, stringPool);
                     break;
                 case "ByteProperty":
                     result = UEByteProperty.Read(reader, valueLength);
+                    break;
+                case "EntityRef":
+                    result = new UEEntityRefProperty(reader, valueLength);
+                    break;
+                case "ObjectProperty":
+                    result = new UEObjectProperty(reader, valueLength);
+                    break;
+                case "MissionVersion":
+                    result = new MissionVersion(reader, valueLength, stringPool);
                     break;
                 default:
                     throw new FormatException($"Offset: 0x{itemOffset:x8}. Unknown value type '{type}' of item '{name}'");
@@ -51,13 +67,13 @@ namespace GvasFormat.Serialization
             return result;
         }
 
-        internal static UEProperty[] Deserialize(string name, string type, long valueLength, int count, BinaryReader reader)
+        internal static UEProperty[] Deserialize(string name, string type, long valueLength, int count, BinaryReader reader, StringPool stringPool)
         {
             UEProperty[] result;
             switch (type)
             {
                 case "StructProperty":
-                    result = UEStructProperty.Read(reader, valueLength, count);
+                    result = UEStructProperty.Read(reader, valueLength, count, stringPool);
                     break;
                 case "ByteProperty":
                     result = UEByteProperty.Read(reader, valueLength, count);

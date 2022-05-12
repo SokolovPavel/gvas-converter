@@ -1,6 +1,10 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using System;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Threading;
 
 namespace GvasConverter
 {
@@ -12,7 +16,11 @@ namespace GvasConverter
             string userFilesPath = Environment.ExpandEnvironmentVariables("%USERPROFILE%");
             string pathToSaveFiles = "\\AppData\\Local\\Astro\\Saved\\SaveGames\\";
             var directory = new DirectoryInfo(userFilesPath + pathToSaveFiles);
-
+            if (!directory.Exists)
+            {
+                Console.WriteLine("Savegame directory does not exist");
+                return;
+            }
             DateTime lastModifiedDate = DateTime.MinValue;
             while (true)
             {

@@ -11,9 +11,10 @@ namespace GvasFormat.Serialization.UETypes
         private static readonly Encoding Utf8 = new UTF8Encoding(false);
 
         public UEEnumProperty() { }
-        public UEEnumProperty(BinaryReader reader, long valueLength)
+        public UEEnumProperty(BinaryReader reader, long valueLength, StringPool stringPool)
         {
-            EnumType = reader.ReadUEString();
+            byte[] restLength = reader.ReadBytes(4);
+            EnumType = stringPool.GetString(reader.ReadInt32());
 
             var terminator = reader.ReadByte();
             if (terminator != 0)
@@ -21,7 +22,7 @@ namespace GvasFormat.Serialization.UETypes
 
             // valueLength starts here
 
-            Value = reader.ReadUEString();
+            Value = stringPool.GetString(reader.ReadInt32());
         }
 
         public override void Serialize(BinaryWriter writer) => throw new NotImplementedException();

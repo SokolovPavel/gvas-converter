@@ -10,6 +10,7 @@ namespace GvasFormat.Serialization.UETypes
         public UEBoolProperty() { }
         public UEBoolProperty(BinaryReader reader, long valueLength)
         {
+            byte[] restlength = reader.ReadBytes(4);
             if (valueLength != 0)
                 throw new FormatException($"Offset: 0x{reader.BaseStream.Position - 1:x8}. Expected bool value length 0, but was {valueLength}");
 

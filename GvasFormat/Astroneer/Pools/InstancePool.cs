@@ -18,7 +18,17 @@ namespace GvasFormat.Serialization
             Dictionary<string, int> map = new Dictionary<string, int>();
             for (int i = 0; i < size; i++)
             {
-                _objectPool[i] = objectReader.read(reader);
+                var entity = objectReader.read(reader);
+                _objectPool[i] = entity;
+                if (entity.HasParent())
+                {
+                    _objectPool[entity.parentIndex].AddComponent(entity);
+                }
+            }
+
+            for (int i = 0; i < size; i++)
+            {
+                
             }
         }
     }
